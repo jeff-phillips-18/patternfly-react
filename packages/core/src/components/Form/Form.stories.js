@@ -6,7 +6,10 @@ import { action } from '@storybook/addon-actions';
 import { withKnobs, boolean } from '@storybook/addon-knobs';
 import { withInfo } from '@storybook/addon-info';
 import { inlineTemplate } from 'storybook/decorators/storyTemplates';
-import { DOCUMENTATION_URL } from 'storybook/constants/siteConstants';
+import {
+  DOCUMENTATION_URL,
+  STORYBOOK_CATEGORY
+} from 'storybook/constants/siteConstants';
 import { Icon } from '../Icon';
 import { Col, Row, Grid } from '../Grid';
 import { Button } from '../Button';
@@ -37,7 +40,10 @@ import { HorizontalFormField } from './Stories/HorizontalFormField';
 import { VerticalFormField } from './Stories/VerticalFormField';
 import { name } from '../../../package.json';
 
-const stories = storiesOf(`${name}/Forms`, module);
+const stories = storiesOf(
+  `${name}/${STORYBOOK_CATEGORY.FORMS_AND_CONTROLS}/Forms`,
+  module
+);
 
 stories.addDecorator(withKnobs);
 

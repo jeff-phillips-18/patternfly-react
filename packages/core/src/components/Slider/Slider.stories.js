@@ -2,12 +2,18 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { defaultTemplate } from 'storybook/decorators/storyTemplates';
-import { DOCUMENTATION_URL } from 'storybook/constants/siteConstants';
+import {
+  DOCUMENTATION_URL,
+  STORYBOOK_CATEGORY
+} from 'storybook/constants/siteConstants';
 import { Slider } from './index';
 import { Form, FormControl, ControlLabel, FormGroup, Col } from '../../index';
 import { name } from '../../../package.json';
 
-const SliderStories = storiesOf(`${name}/Slider`, module);
+const SliderStories = storiesOf(
+  `${name}/${STORYBOOK_CATEGORY.FORMS_AND_CONTROLS}/Slider`,
+  module
+);
 
 SliderStories.addDecorator(withKnobs);
 SliderStories.addDecorator(

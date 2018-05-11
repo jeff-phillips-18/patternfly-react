@@ -4,6 +4,7 @@ import { withInfo } from '@storybook/addon-info';
 import { defaultTemplate } from 'storybook/decorators/storyTemplates';
 import { name } from '../../../package.json';
 
+import { STORYBOOK_CATEGORY } from 'storybook/constants/siteConstants';
 import {
   AboutModal,
   AboutModalVersions,
@@ -15,7 +16,10 @@ import {
   MockAboutModalSource
 } from './__mocks__/mockAboutModal';
 
-const stories = storiesOf(`${name}/AboutModal`, module);
+const stories = storiesOf(
+  `${name}/${STORYBOOK_CATEGORY.COMMUNICATION}/About Modal`,
+  module
+);
 
 stories.addDecorator(
   defaultTemplate({

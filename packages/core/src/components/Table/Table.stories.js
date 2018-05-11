@@ -1,5 +1,6 @@
 import { storiesOf } from '@storybook/react';
 import { withKnobs } from '@storybook/addon-knobs';
+import { STORYBOOK_CATEGORY } from 'storybook/constants/siteConstants';
 import {
   bootstrapTable,
   clientSortableTable,
@@ -12,7 +13,10 @@ import {
 } from './Stories';
 import { name } from '../../../package.json';
 
-const stories = storiesOf(`${name}/Table`, module);
+const stories = storiesOf(
+  `${name}/${STORYBOOK_CATEGORY.CONTENT_VIEWS}/Table View`,
+  module
+);
 stories.addDecorator(withKnobs);
 
 /**

@@ -4,12 +4,18 @@ import { action } from '@storybook/addon-actions';
 import { withKnobs, text, select } from '@storybook/addon-knobs';
 import { withInfo } from '@storybook/addon-info';
 import { defaultTemplate } from 'storybook/decorators/storyTemplates';
-import { DOCUMENTATION_URL } from 'storybook/constants/siteConstants';
+import {
+  DOCUMENTATION_URL,
+  STORYBOOK_CATEGORY
+} from 'storybook/constants/siteConstants';
 import { ALERT_TYPES } from './AlertConstants';
 import { Alert } from './index';
 import { name } from '../../../package.json';
 
-const stories = storiesOf(`${name}/Alert`, module);
+const stories = storiesOf(
+  `${name}/${STORYBOOK_CATEGORY.WIDGETS}/Alert`,
+  module
+);
 stories.addDecorator(withKnobs);
 stories.addDecorator(
   defaultTemplate({

@@ -4,7 +4,10 @@ import { action } from '@storybook/addon-actions';
 import { withKnobs, text, select, boolean } from '@storybook/addon-knobs';
 import { withInfo } from '@storybook/addon-info';
 import { inlineTemplate } from 'storybook/decorators/storyTemplates';
-import { DOCUMENTATION_URL } from 'storybook/constants/siteConstants';
+import {
+  DOCUMENTATION_URL,
+  STORYBOOK_CATEGORY
+} from 'storybook/constants/siteConstants';
 import { Button } from '../Button';
 import { DropdownKebab } from '../DropdownKebab';
 import { MenuItem } from '../MenuItem';
@@ -15,7 +18,10 @@ import {
 } from './index';
 import { name } from '../../../package.json';
 
-const stories = storiesOf(`${name}/ToastNotification`, module);
+const stories = storiesOf(
+  `${name}/${STORYBOOK_CATEGORY.COMMUNICATION}/Toast Notifications`,
+  module
+);
 stories.addDecorator(withKnobs);
 
 stories.add(

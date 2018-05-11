@@ -5,6 +5,10 @@ import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
 import { withKnobs } from '@storybook/addon-knobs';
 import { defaultTemplate } from 'storybook/decorators/storyTemplates';
+import {
+  DOCUMENTATION_URL,
+  STORYBOOK_CATEGORY
+} from 'storybook/constants/siteConstants';
 
 import { mockNavItems } from './__mocks__/mockNavItems';
 import { MockIconBarChildren } from './__mocks__/mockIconBarChildren';
@@ -53,15 +57,19 @@ const mockBodyContainer = className => (
 const propTypesAreBroke = `***Note: Prop Type descriptions are missing on this page
 due to a Storybook bug. Please see the source code for propType description comments.***`;
 
-const stories = storiesOf(`${name}/Vertical Navigation`, module);
+const stories = storiesOf(
+  `${name}/${STORYBOOK_CATEGORY.NAVIGATION}/Vertical Navigation`,
+  module
+);
 stories.addDecorator(withKnobs);
 stories.addDecorator(
   defaultTemplate({
     title: 'Vertical Navigation',
     description:
       'Please click "Show Info" for example source and component documentation.',
-    documentationLink:
-      'http://www.patternfly.org/pattern-library/navigation/vertical-navigation/'
+    documentationLink: `${
+      DOCUMENTATION_URL.PATTERNFLY_ORG_NAVIGATION
+    }vertical-navigation/`
   })
 );
 
