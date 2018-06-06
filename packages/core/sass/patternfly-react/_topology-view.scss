@@ -15,9 +15,19 @@
   }
 
   .node-circle {
-    stroke-width: 7px;
+    stroke-width: 8px;
     stroke: $color-pf-blue-300;
     fill: $color-pf-black-100;
+
+    &.ok {
+      stroke: $color-pf-green;
+    }
+    &.error {
+      stroke: $color-pf-red;
+    }
+    &.unknown {
+      stroke: $color-pf-black-500;
+    }
   }
 
   .node-image-container {
@@ -46,11 +56,5 @@
     fill: none;
     stroke: $color-pf-black-700;
     stroke-width: 1px;
-  }
-
-  .error-items-circle {
-    stroke-width: 8px;
-    fill: none;
-    stroke: $color-pf-red;
   }
 }

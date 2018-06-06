@@ -143,7 +143,7 @@ const edges = [
   { data: { id: '5', source: route2, target: testWebUi } },
   { data: { id: '6', source: api, target: booking } },
   { data: { id: '7', source: api, target: storeInventory } },
-  { data: { id: '8', source: api, target: cinemaCatalog } },
+  //  { data: { id: '8', source: api, target: cinemaCatalog } },
   { data: { id: '9', source: storeWebUi, target: storeInventory } },
   { data: { id: '10', source: cinemaWebUi, target: cinemaCatalog } },
   { data: { id: '11', source: testWebUi, target: cinemaCatalog } },
@@ -165,5 +165,7 @@ stories.addDecorator(
 
 stories.add(
   'TopologyView',
-  withInfo()(() => <TopologyView containers={containers} nodes={nodes} edges={edges} />)
+  withInfo()(() => (
+    <TopologyView containers={containers} nodes={nodes} edges={edges} />
+  ))
 );

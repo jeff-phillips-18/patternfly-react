@@ -4,9 +4,6 @@ import classNames from 'classnames';
 
 import dagre from 'dagre';
 
-import { ReactCytoscape } from 'react-cytoscape';
-import { patternfly } from '../../common/patternfly';
-
 /**
  * Topology View
  */
@@ -34,34 +31,6 @@ class TopologyView extends React.Component {
     this.layoutDagre(nextProps);
   }
 
-  getElements = () => {
-    const { containers, nodes, edges } = this.props;
-
-    return {
-      nodes: [...containers, ...nodes],
-      edges
-    };
-  };
-
-  /** Support Bezier connectors at some point?
-  getBezierPath = edge => {
-    const source = edge.data.source.graphData;
-    const middle = edge.graphData.points[1];
-    const target = edge.data.target.graphData;
-
-    const startPoint = { x: source.x + (NODE_ICON_WIDTH / 2) - source.width / 2, y: source.y };
-    const midPoint = { x: middle.x - startPoint.x, y: middle.y - startPoint.y };
-    const endPoint = {
-      x: target.x + (NODE_ICON_WIDTH / 2) - target.width / 2 - startPoint.x,
-      y: target.y + 10 - target.height / 2 - startPoint.y
-    };
-
-    return `M ${startPoint.x} ${startPoint.y} q ${midPoint.x} ${midPoint.y} ${
-      endPoint.x
-    } ${endPoint.y}`;
-  };
-  */
-
   getEdgePoints = edge => {
     const source = edge.data.source.graphData;
     const target = edge.data.target.graphData;
@@ -75,7 +44,7 @@ class TopologyView extends React.Component {
     return `${startPoint} ${endPoint}`;
   };
 
-  layoutDagre = function(props, graph) {
+  layoutDagre = (props, graph) => {
     const { containers, nodes, edges } = props;
 
     containers.forEach(container => {
@@ -103,7 +72,6 @@ class TopologyView extends React.Component {
           width: node.data.width || DEFAULT_NODE_WIDTH,
           height: node.data.height || DEFAULT_NODE_HEIGHT
         };
-        console.log(`Adding child node: ${node.data.id}`);
         graph.setNode(node.data.id, node.graphData);
         graph.setParent(node.data.id, container.data.id);
       });
@@ -123,7 +91,7 @@ class TopologyView extends React.Component {
     dagre.layout(graph);
   };
 
-  polarToCartesian = function(centerX, centerY, radius, angleInDegrees) {
+  polarToCartesian = (centerX, centerY, radius, angleInDegrees) => {
     const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0;
 
     return {
@@ -132,13 +100,13 @@ class TopologyView extends React.Component {
     };
   };
 
-  describeArc = function(x, y, radius, startAngle, endAngle) {
+  describeArc = (x, y, radius, startAngle, endAngle) => {
     const start = this.polarToCartesian(x, y, radius, endAngle);
     const end = this.polarToCartesian(x, y, radius, startAngle);
 
     const largeArcFlag = endAngle - startAngle <= 180 ? '0' : '1';
 
-    const d = [
+    return [
       'M',
       start.x,
       start.y,
@@ -151,8 +119,6 @@ class TopologyView extends React.Component {
       end.x,
       end.y
     ].join(' ');
-
-    return d;
   };
 
   renderEdges = edges => (
@@ -167,82 +133,154 @@ class TopologyView extends React.Component {
     </g>
   );
 
-  /** Support Bezier paths at some point?
-          <path
-          className="connection-line"
-          d={this.getBezierPath(edge)}
-          stroke="blue"
-          strokeWidth="5"
-          fill="none"
-        />
+  renderNodeCircle = (node, top, left) => (
+    <circle
+      className="node-circle"
+      r={NODE_ICON_WIDTH / 2}
+      cx={left + NODE_ICON_WIDTH / 2}
+      cy={0}
+    />
+  );
 
-   */
-  renderNode = node => {
+  renderNodeSuccess = (node, top, left) => {
+    const { data } = node;
+    const total = data.total || 0;
+    const percentSuccess = total > 0 ? (data.success || 0) / total : 0;
+
+    return (
+      <path
+        className="node-circle ok"
+        d={this.describeArc(
+          left + NODE_ICON_WIDTH / 2,
+          0,
+          NODE_ICON_WIDTH / 2,
+          360 - 360 * percentSuccess,
+          360
+        )}
+      />
+    );
+  };
+
+  renderNodeErrors = (node, top, left) => {
+    const { data } = node;
+    const total = data.total || 0;
+    const percentError = total > 0 ? (data.error || 0) / total : 0;
+
+    return (
+      <path
+        className="node-circle error"
+        d={this.describeArc(
+          left + NODE_ICON_WIDTH / 2,
+          0,
+          NODE_ICON_WIDTH / 2,
+          0,
+          360 * percentError
+        )}
+      />
+    );
+  };
+
+  renderNodeUnknowns = (node, top, left) => {
+    const { data } = node;
+
+    if (!data.unknown) {
+      return null;
+    }
+
+    const total = data.total || 0;
+    const percentSuccess = total > 0 ? (data.success || 0) / total : 0;
+    const percentUnknown = total > 0 ? data.unknown / total : 0;
+
+    return (
+      <path
+        className="node-circle unknown"
+        d={this.describeArc(
+          left + NODE_ICON_WIDTH / 2,
+          0,
+          NODE_ICON_WIDTH / 2,
+          360 - 360 * percentUnknown,
+          360 - 360 * percentSuccess
+        )}
+      />
+    );
+  };
+
+  renderNodeImage = (node, top, left) => {
+    const { data, graphData } = node;
+
+    return (
+      <foreignObject
+        x={left}
+        y={top + (graphData.height - NODE_ICON_HEIGHT) / 2}
+        width={NODE_ICON_WIDTH}
+        height={NODE_ICON_HEIGHT}
+      >
+        <div className="node-image-container">
+          {data.image && (
+            <img className="node-image" src={data.image} alt={data.id} />
+          )}
+          {!data.image && <span className="node-title">{data.id}</span>}
+        </div>
+      </foreignObject>
+    );
+  };
+
+  renderNodeInputConnector = (node, top, left) => {
     const { edges } = this.props;
-    const total = node.data.total || 0;
-    const percentError = total > 0 ? (node.data.error || 0) / total : 0;
+    const { graphData } = node;
 
     const hasSource =
       edges.find(edge => edge.data.target.data.id === node.data.id) !==
       undefined;
 
+    if (hasSource) {
+      return (
+        <circle
+          className="node-input-connector"
+          r={CONNECTOR_RADIUS}
+          cx={left + NODE_ICON_WIDTH / 2}
+          cy={
+            top +
+            (graphData.height - NODE_ICON_HEIGHT) / 2 -
+            CONNECTOR_RADIUS / 2
+          }
+        />
+      );
+    }
+
+    return null;
+  };
+
+  renderNodeTitle = (node, top, left) => {
     const { data, graphData } = node;
+
+    return (
+      <foreignObject
+        x={left + NODE_ICON_WIDTH + 5}
+        y={top + (graphData.height - NODE_ICON_HEIGHT) / 2}
+        width={graphData.width - (NODE_ICON_WIDTH + 5)}
+        height={graphData.height}
+      >
+        <span className="node-title">{data.title}</span>
+      </foreignObject>
+    );
+  };
+
+  renderNode = node => {
+    const { data, graphData } = node;
+
     const top = -graphData.height / 2;
     const left = -graphData.width / 2;
 
     return (
       <g key={data.id} transform={`translate(${graphData.x}, ${graphData.y})`}>
-        <circle
-          className="node-circle"
-          r={NODE_ICON_WIDTH / 2}
-          cx={left + NODE_ICON_WIDTH / 2}
-          cy={0}
-        />
-        <foreignObject
-          x={left}
-          y={top + (graphData.height - NODE_ICON_HEIGHT) / 2}
-          width={NODE_ICON_WIDTH}
-          height={NODE_ICON_HEIGHT}
-        >
-          <div className="node-image-container">
-            {data.image && (
-              <img className="node-image" src={data.image} alt={data.id} />
-            )}
-            {!data.image && <span className="node-title">{data.id}</span>}
-          </div>
-        </foreignObject>
-        <g x={-graphData.width / 2}>
-          <path
-            className="error-items-circle"
-            d={this.describeArc(
-              left + NODE_ICON_WIDTH / 2,
-              0,
-              NODE_ICON_WIDTH / 2,
-              0,
-              360 * percentError
-            )}
-          />
-        </g>
-        {hasSource && (
-          <circle
-            className="node-input-connector"
-            r={CONNECTOR_RADIUS}
-            cx={left + NODE_ICON_WIDTH / 2}
-            cy={
-              top +
-              (graphData.height - NODE_ICON_HEIGHT) / 2 -
-              CONNECTOR_RADIUS / 2
-            }
-          />
-        )}
-        <foreignObject
-          x={left + NODE_ICON_WIDTH + 5}
-          y={top + (graphData.height - NODE_ICON_HEIGHT) / 2}
-          width={graphData.width - (NODE_ICON_WIDTH + 5)}
-          height={graphData.height}
-        >
-          <span className="node-title">{data.title}</span>
-        </foreignObject>
+        {this.renderNodeCircle(node, top, left)}
+        {this.renderNodeSuccess(node, top, left)}
+        {this.renderNodeErrors(node, top, left)}
+        {this.renderNodeUnknowns(node, top, left)}
+        {this.renderNodeImage(node, top, left)}
+        {this.renderNodeInputConnector(node, top, left)}
+        {this.renderNodeTitle(node, top, left)}
       </g>
     );
   };
@@ -253,32 +291,28 @@ class TopologyView extends React.Component {
     </g>
   );
 
-  renderContainers = containers => {
-    const containerComponents = (
-      <g>
-        {containers.map(node => (
-          <g
-            key={node.data.id}
-            transform={`translate(${node.graphData.x}, ${node.graphData.y})`}
-          >
-            <rect
-              className="container-rect"
-              ry="0"
-              rx="0"
-              x={-node.graphData.width / 2}
-              y={-node.graphData.height / 2}
-              width={node.graphData.width}
-              height={node.graphData.height}
-            />
-          </g>
-        ))}
-      </g>
-    );
+  renderContainers = containers => (
+    <g>
+      {containers.map(node => (
+        <g
+          key={node.data.id}
+          transform={`translate(${node.graphData.x}, ${node.graphData.y})`}
+        >
+          <rect
+            className="container-rect"
+            ry="0"
+            rx="0"
+            x={-node.graphData.width / 2}
+            y={-node.graphData.height / 2}
+            width={node.graphData.width}
+            height={node.graphData.height}
+          />
+        </g>
+      ))}
+    </g>
+  );
 
-    return containerComponents;
-  };
-
-  renderSvg = function() {
+  renderSvg = () => {
     const { containers, nodes, edges } = this.props;
 
     return (
@@ -300,60 +334,8 @@ class TopologyView extends React.Component {
     );
   };
 
-  renderCytoscpe = function() {
-    const { className, nodeStyle, edgeStyle } = this.props;
-    const topologyClasses = classNames('topology-container', className);
-
-    const defaultStyles = [
-      {
-        selector: 'node',
-        style: nodeStyle
-      },
-      {
-        selector: 'edge',
-        style: edgeStyle
-      }
-    ];
-
-    const cyRef = cy => {
-      this.cy = cy;
-    };
-
-    return (
-      <ReactCytoscape
-        className={topologyClasses}
-        containerID="cy"
-        elements={this.getElements()}
-        style={defaultStyles}
-        cyRef={cy => {
-          cyRef(cy);
-        }}
-        cytoscapeOptions={{ wheelSensitivity: 0.1 }}
-        layout={{ name: 'dagre' }}
-      />
-    );
-  };
-
-  /*
-          {this.graph.edges().map(connection => (
-            <g className="connection">
-              <g>
-                <path className="connection-line {{connection.classes()}}"
-                      d="M {{connection.sourceCoordX()}}, {{connection.sourceCoordY()}}
-                                   L {{connection.middleCoordX()}}, {{connection.sourceCoordY()}}
-                                   L {{connection.middleCoordX()}}, {{connection.destCoordY()}}
-                                   L {{connection.destCoordX()}}, {{connection.destCoordY()}}">
-                </path>
-                <polygon className={`connection-endpoint ${connection.classes()}`}
-                         points="{connection.destEndPoints(connectorSize)}">
-                </polygon>
-              </g>
-            </g>
-          ))}
-  */
-
   render() {
-    const { className, nodeStyle, edgeStyle, ...props } = this.props;
+    const { className, ...props } = this.props;
 
     const topologyClasses = classNames('topology-container', className);
 
@@ -373,35 +355,14 @@ TopologyView.propTypes = {
   /** Nodes */
   nodes: PropTypes.array,
   /** Edges */
-  edges: PropTypes.array,
-  /** Node Styles, default style for all nodes */
-  nodeStyle: PropTypes.object,
-  /** Edge Styles, default style for all edges */
-  edgeStyle: PropTypes.object
+  edges: PropTypes.array
 };
 
 TopologyView.defaultProps = {
   className: '',
   containers: [],
   nodes: [],
-  edges: [],
-  nodeStyle: {
-    width: 120,
-    height: 60
-  },
-  edgeStyle: {
-    width: 2,
-    'curve-style': 'bezier',
-    'line-color': patternfly.pfPaletteColors.black900,
-    'source-arrow-shape': 'none',
-    'source-endpoint': 'outside-to-node',
-    'target-arrow-shape': 'circle',
-    'target-arrow-fill': 'hollow',
-    'target-arrow-color': patternfly.pfPaletteColors.black500,
-    'target-endpoint': ['-0px', '-25px'],
-    'arrow-scale': 2,
-    'z-index': 2000
-  }
+  edges: []
 };
 
 export default TopologyView;
