@@ -28,10 +28,12 @@
     "breakjs": "^1.0.0",
     "classnames": "^2.2.5",
     "css-element-queries": "^1.0.1",
+    "dagre": "^0.8.2",
     "patternfly": "^3.48.0",
     "react-bootstrap": "^0.32.1",
     "react-bootstrap-switch": "^15.5.3",
     "react-c3js": "^0.1.20",
+    "react-cytoscape": "^1.0.6",
     "react-fontawesome": "^1.6.1",
     "reactabular-table": "^8.14.0",
     "recompose": "^0.26.0"

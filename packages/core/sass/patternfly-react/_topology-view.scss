@@ -1,0 +1,56 @@
+.topology-container {
+  height: 100%;
+  background-color: $color-pf-black-300;
+
+  .graph {
+    border: 1px solid $color-pf-black-700;
+    min-width: 300px;
+    min-height: 500px;
+  }
+
+  .container-rect {
+    fill: $color-pf-blue-100;
+    fill-opacity: 1.0;
+    stroke-width: 1;
+  }
+
+  .node-circle {
+    stroke-width: 7px;
+    stroke: $color-pf-blue-300;
+    fill: $color-pf-black-100;
+  }
+
+  .node-image-container {
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+    height: calc(100% - 20px);
+  }
+
+  .node-image {
+    width: 100%;
+    height: 100%;
+  }
+
+  .node-title {
+    margin: 0;
+  }
+
+  .node-input-connector {
+    stroke-width: 1px;
+    stroke: $color-pf-black-700;
+    fill: $color-pf-black-100;
+  }
+
+  .connection-line {
+    fill: none;
+    stroke: $color-pf-black-700;
+    stroke-width: 1px;
+  }
+
+  .error-items-circle {
+    stroke-width: 8px;
+    fill: none;
+    stroke: $color-pf-red;
+  }
+}
