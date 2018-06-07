@@ -1,0 +1,98 @@
+.topology-container {
+  background-color: $color-pf-black-300;
+  overflow: auto;
+
+  .graph {
+    border: 1px solid $color-pf-black-700;
+    min-width: 300px;
+    min-height: 500px;
+  }
+
+  .container-rect {
+    fill: $color-pf-blue-100;
+    fill-opacity: 1;
+    stroke-width: 1;
+  }
+
+  .container-title {
+    margin: 20px 15px;
+    font-size: 16px;
+  }
+
+  .node-circle {
+    stroke-width: 8px;
+    stroke: $color-pf-blue-300;
+    fill: $color-pf-black-100;
+
+    &.ok {
+      stroke: $color-pf-green;
+    }
+
+    &.error {
+      stroke: $color-pf-red;
+    }
+
+    &.unknown {
+      stroke: $color-pf-black-500;
+    }
+  }
+
+  .node-image-container {
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+    height: calc(100% - 20px);
+  }
+
+  .node-selection-circle {
+    stroke-width: 3px;
+    stroke: $color-pf-blue-200;
+    fill: none;
+  }
+
+  .node-image {
+    width: 100%;
+    height: 100%;
+  }
+
+  .node-icon {
+    font-size: 36px;
+  }
+
+  .node-title {
+    margin: 0;
+  }
+
+  .node-input-connector {
+    stroke-width: 1px;
+    stroke: $color-pf-black-500;
+    fill: $color-pf-black-100;
+  }
+
+  .node-input-connector-selection {
+    stroke-width: 3px;
+    stroke: $color-pf-blue-200;
+    fill: none;
+  }
+
+  .connection-line {
+    fill: none;
+    stroke: $color-pf-black-500;
+    stroke-width: 3px;
+
+    &.selected {
+      stroke-width: 3px;
+      stroke: $color-pf-blue-200;
+    }
+  }
+
+  .connection-line-selector {
+    fill: none;
+    stroke: transparent;
+    stroke-width: 5px;
+
+    &.selected {
+      stroke: $color-pf-blue-200;
+    }
+  }
+}

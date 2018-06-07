@@ -39,6 +39,7 @@ export * from './components/Table';
 export * from './components/ToastNotification';
 export * from './components/Toolbar';
 export * from './components/Tooltip';
+export * from './components/TopologyView';
 export * from './components/TreeView';
 export * from './components/UtilizationBar';
 export * from './components/Wizard';
