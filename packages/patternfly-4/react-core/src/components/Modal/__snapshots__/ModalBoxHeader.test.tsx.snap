@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ModalBoxHeader Test 1`] = `
+<Fragment>
+  <Title
+    className=""
+    headingLevel="h1"
+    size="2xl"
+  >
+    This is a ModalBox header
+  </Title>
+</Fragment>
+`;
+
+exports[`ModalBoxHeader Test hideTitle 1`] = `
+<Fragment>
+  <Title
+    className="pf-u-screen-reader"
+    headingLevel="h1"
+    size="2xl"
+  >
+    This is a ModalBox header
+  </Title>
+</Fragment>
+`;
