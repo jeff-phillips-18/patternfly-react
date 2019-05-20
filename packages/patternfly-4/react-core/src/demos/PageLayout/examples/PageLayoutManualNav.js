@@ -45,7 +45,7 @@ class PageLayoutManualNav extends React.Component {
       activeItem: 0,
       isMobileView: false,
       isNavOpenDesktop: true,
-      isNavOpenMobile: true
+      isNavOpenMobile: false
     };
   }
 
@@ -196,7 +196,6 @@ class PageLayoutManualNav extends React.Component {
         isNavOpen={isMobileView ? isNavOpenMobile : isNavOpenDesktop}
       />
     );
-    debugger;
     const Sidebar = <PageSidebar nav={PageNav} isNavOpen={isMobileView ? isNavOpenMobile : isNavOpenDesktop} />;
     const PageSkipToContent = (
       <SkipToContent href="#main-content-page-layout-default-nav">Skip to Content</SkipToContent>
