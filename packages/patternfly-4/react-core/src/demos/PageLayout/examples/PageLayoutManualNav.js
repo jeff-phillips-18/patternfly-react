@@ -45,7 +45,7 @@ class PageLayoutManualNav extends React.Component {
       activeItem: 0,
       isMobileView: false,
       isNavOpenDesktop: true,
-      isNavOpenMobile: false
+      isNavOpenMobile: true
     };
   }
 
@@ -110,19 +110,19 @@ class PageLayoutManualNav extends React.Component {
     const PageNav = (
       <Nav onSelect={this.onNavSelect} aria-label="Nav">
         <NavList>
-          <NavItem to="#nav-link1" itemId={0} isActive={activeItem === 0}>
+          <NavItem to="#nav-link1" preventDefault itemId={0} isActive={activeItem === 0}>
             System Panel
           </NavItem>
-          <NavItem to="#nav-link2" itemId={1} isActive={activeItem === 1}>
+          <NavItem to="#nav-link2" preventDefault itemId={1} isActive={activeItem === 1}>
             Policy
           </NavItem>
-          <NavItem to="#nav-link3" itemId={2} isActive={activeItem === 2}>
+          <NavItem to="#nav-link3" preventDefault itemId={2} isActive={activeItem === 2}>
             Authentication
           </NavItem>
-          <NavItem to="#nav-link4" itemId={3} isActive={activeItem === 3}>
+          <NavItem to="#nav-link4" preventDefault itemId={3} isActive={activeItem === 3}>
             Network Services
           </NavItem>
-          <NavItem to="#nav-link5" itemId={4} isActive={activeItem === 4}>
+          <NavItem to="#nav-link5" preventDefault itemId={4} isActive={activeItem === 4}>
             Server
           </NavItem>
         </NavList>
@@ -196,6 +196,7 @@ class PageLayoutManualNav extends React.Component {
         isNavOpen={isMobileView ? isNavOpenMobile : isNavOpenDesktop}
       />
     );
+    debugger;
     const Sidebar = <PageSidebar nav={PageNav} isNavOpen={isMobileView ? isNavOpenMobile : isNavOpenDesktop} />;
     const PageSkipToContent = (
       <SkipToContent href="#main-content-page-layout-default-nav">Skip to Content</SkipToContent>
