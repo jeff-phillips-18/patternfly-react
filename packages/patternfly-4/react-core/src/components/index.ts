@@ -25,6 +25,7 @@ export * from './InputGroup';
 export * from './Label';
 export * from './List';
 export * from './LoginPage';
+export * from './MegaMenu';
 export * from './Modal';
 export * from './Nav';
 export * from './OptionsMenu';

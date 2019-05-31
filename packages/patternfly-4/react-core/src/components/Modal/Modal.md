@@ -4,7 +4,7 @@ cssPrefix: 'pf-c-modal-box'
 typescript: true
 ---
 
-import { Modal, Button } from '@patternfly/react-core';
+import { Modal, Button, BaseSizes, TitleLevel } from '@patternfly/react-core';
 import { WarningTriangleIcon } from '@patternfly/react-icons';
 
 ## Simple modal
@@ -217,7 +217,7 @@ class WidthModal extends React.Component {
 ## Modal (custom header and footer)
 ```js
 import React from 'react';
-import { Modal, Button } from '@patternfly/react-core';
+import { Modal, Button, BaseSizes, TitleLevel } from '@patternfly/react-core';
 
 class CustomHeaderFooter extends React.Component {
   constructor(props) {

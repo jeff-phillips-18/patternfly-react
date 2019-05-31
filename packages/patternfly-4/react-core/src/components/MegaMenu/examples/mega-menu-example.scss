@@ -1,0 +1,14 @@
+.external-link-nav-item {
+  display: block;
+  .external-link-nav-item__icon {
+    display: none;
+  }
+  &:hover, &:focus {
+    .external-link-nav-item__icon {
+      display: inline;
+    }
+  }
+  &:after {
+    background-color: transparent !important;
+  }
+}

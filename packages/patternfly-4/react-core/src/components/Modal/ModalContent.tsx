@@ -15,7 +15,6 @@ import { ModalBoxHeader } from './ModalBoxHeader';
 import { ModalBoxCloseButton } from './ModalBoxCloseButton';
 import { ModalBox } from './ModalBox';
 import { ModalBoxFooter } from './ModalBoxFooter';
-import {getModifier} from "../../../../react-styles/dist/js";
 
 export interface ModalContentProps {
   /** Content rendered inside the Modal. */
@@ -69,9 +68,7 @@ export const ModalContent: React.FunctionComponent<ModalContentProps> = ({
     return null;
   }
 
-  const modalBoxHeader = header ?
-    <div className={css(titleStyles.title)}>{header}</div> :
-    <ModalBoxHeader hideTitle={hideTitle}> {title} </ModalBoxHeader>;
+  const modalBoxHeader = header ? header : <ModalBoxHeader hideTitle={hideTitle}> {title} </ModalBoxHeader>;
 
   const modalBoxFooter = footer ?
     <ModalBoxFooter>{footer}</ModalBoxFooter> :
