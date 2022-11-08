@@ -2,9 +2,12 @@ import * as React from 'react';
 import { action } from 'mobx';
 import * as _ from 'lodash';
 import {
+  Controller,
   createTopologyControlButtons,
   defaultControlButtonsOptions,
+  Edge,
   EdgeModel,
+  Node,
   NodeModel,
   SELECTION_EVENT,
   SelectionEventListener,
@@ -27,6 +30,31 @@ interface TopologyViewComponentProps {
   useSidebar: boolean;
   sideBarResizable?: boolean;
 }
+
+const getNodeEdges = (selectedNode: Node): Edge[] => [
+  ...selectedNode.getSourceEdges(),
+  ...selectedNode.getTargetEdges()
+];
+
+const setEdgesVisible = action((edges: Edge[], visible: boolean) => edges.forEach(edge => edge.setVisible(visible)));
+
+const showNodeEdges = (controller: Controller, nodeId: string) => {
+  if (!nodeId) {
+    setEdgesVisible(controller.getGraph().getEdges(), true);
+    return;
+  }
+
+  setEdgesVisible(controller.getGraph().getEdges(), false);
+
+  const selectedNode = controller.getNodeById(nodeId);
+  if (selectedNode?.isGroup()) {
+    // set visible edges
+    selectedNode.getAllNodeChildren().forEach(child => setEdgesVisible(getNodeEdges(child), true));
+  } else if (selectedNode) {
+    // set visible edges
+    setEdgesVisible(getNodeEdges(selectedNode), true);
+  }
+};
 
 const TopologyViewComponent: React.FunctionComponent<TopologyViewComponentProps> = ({
   useSidebar,
@@ -73,6 +101,7 @@ const TopologyViewComponent: React.FunctionComponent<TopologyViewComponentProps>
 
   useEventListener<SelectionEventListener>(SELECTION_EVENT, ids => {
     setSelectedIds(ids);
+    showNodeEdges(controller, ids?.[0]);
   });
 
   React.useEffect(() => {

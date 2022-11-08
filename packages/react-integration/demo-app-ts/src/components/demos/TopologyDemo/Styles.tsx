@@ -1,16 +1,23 @@
 import * as React from 'react';
 import {
   BadgeLocation,
+  Edge,
   EdgeModel,
   EdgeStyle,
   EdgeTerminalType,
   LabelPosition,
   Model,
   NodeModel,
+  Node,
   NodeShape,
   NodeStatus,
+  SELECTION_EVENT,
+  SelectionEventListener,
   useComponentFactory,
-  useModel
+  useEventListener,
+  useModel,
+  useVisualizationController,
+  Controller
 } from '@patternfly/react-topology';
 import withTopologySetup from './utils/withTopologySetup';
 import defaultComponentFactory from './components/defaultComponentFactory';
@@ -34,6 +41,32 @@ import {
   STATUS_VALUES
 } from './utils/styleUtils';
 import { DataTypes } from './components/StyleNode';
+import { action } from 'mobx';
+
+const getNodeEdges = (selectedNode: Node): Edge[] => [
+  ...selectedNode.getSourceEdges(),
+  ...selectedNode.getTargetEdges()
+];
+
+const setEdgesVisible = action((edges: Edge[], visible: boolean) => edges.forEach(edge => edge.setVisible(visible)));
+
+const showNodeEdges = (controller: Controller, nodeId: string) => {
+  if (!nodeId) {
+    setEdgesVisible(controller.getGraph().getEdges(), true);
+    return;
+  }
+
+  setEdgesVisible(controller.getGraph().getEdges(), false);
+
+  const selectedNode = controller.getNodeById(nodeId);
+  if (selectedNode?.isGroup()) {
+    // set visible edges
+    selectedNode.getAllNodeChildren().forEach(child => setEdgesVisible(getNodeEdges(child), true));
+  } else if (selectedNode) {
+    // set visible edges
+    setEdgesVisible(getNodeEdges(selectedNode), true);
+  }
+};
 
 export const NodeStyles = withTopologySetup(() => {
   useComponentFactory(defaultComponentFactory);
@@ -619,7 +652,11 @@ export const EdgeStyles = withTopologySetup(() => {
   useComponentFactory(stylesComponentFactory);
   const nodes: NodeModel[] = createGroupNodes('edges-group');
   const edges: EdgeModel[] = [];
+  const controller = useVisualizationController();
 
+  useEventListener<SelectionEventListener>(SELECTION_EVENT, ids => {
+    showNodeEdges(controller, ids[0]);
+  });
   const middleNodeIndex = nodes.length - 1;
   nodes.forEach((item, index) => {
     if (index === middleNodeIndex) {
