@@ -316,7 +316,7 @@ export const useTopologyOptions = (
   const addNode = () => {
     const newNode = {
       id: `new-node-${newNodeCount.current++}`,
-      type: 'node',
+      type: 'request-trace-node',
       width: 100,
       height: 100,
       data: {}

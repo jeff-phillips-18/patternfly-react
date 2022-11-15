@@ -29,6 +29,8 @@ import Thumbtack from '@patternfly/react-icons/dist/esm/icons/thumbtack-icon';
 import useDetailsLevel from '@patternfly/react-topology/dist/esm/hooks/useDetailsLevel';
 import { SVGIconProps } from '@patternfly/react-icons/dist/esm/createIcon';
 
+import './RequestTrace.css';
+
 export enum DataTypes {
   Default,
   Alternate
@@ -131,6 +133,7 @@ const StyleNode: React.FunctionComponent<StyleNodeProps> = ({
   onHideCreateConnector,
   ...rest
 }) => {
+  const { width, height } = element.getDimensions();
   const data = element.getData();
   const detailsLevel = useDetailsLevel();
   const [hover, hoverRef] = useHover();
@@ -177,6 +180,17 @@ const StyleNode: React.FunctionComponent<StyleNodeProps> = ({
           }
         >
           {(hover || detailsLevel !== ScaleDetailsLevel.low) && renderIcon(passedData, element)}
+          {element.getType() === 'request-trace-node' && (
+            <rect
+              className="request-trace-node-overlay"
+              x={-10}
+              y={-10}
+              rx={20}
+              ry={20}
+              width={width + 20}
+              height={height + 20}
+            />
+          )}
         </DefaultNode>
       </g>
     </Layer>

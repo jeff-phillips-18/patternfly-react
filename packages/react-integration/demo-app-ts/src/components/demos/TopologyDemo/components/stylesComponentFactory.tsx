@@ -63,6 +63,7 @@ const stylesComponentFactory: ComponentFactory = (
     return withDndDrop(graphDropTargetSpec([NODE_DRAG_TYPE]))(withPanZoom()(GraphComponent));
   }
   switch (type) {
+    case 'request-trace-node':
     case 'node':
       return withCreateConnector((source: Node, target: Node | Graph): void => {
         let targetId;
@@ -78,7 +79,7 @@ const stylesComponentFactory: ComponentFactory = (
         }
         model.edges.push({
           id,
-          type: 'edge',
+          type: source.getType() === 'request-trace-node' ? 'request-trace-edge' : 'edge',
           source: source.getId(),
           target: targetId
         });
@@ -99,6 +100,7 @@ const stylesComponentFactory: ComponentFactory = (
         withContextMenu(() => defaultMenu)(withDragNode(nodeDragSourceSpec('group'))(withSelection()(StyleGroup)))
       );
     case 'edge':
+    case 'request-trace-edge':
       return withSourceDrag<DragObjectWithType, Node, any, EdgeProps>({
         item: { type: CONNECTOR_SOURCE_DROP },
         begin: (monitor, props) => {

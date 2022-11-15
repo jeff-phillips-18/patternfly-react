@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { DefaultEdge, Edge, WithContextMenuProps, WithSelectionProps } from '@patternfly/react-topology';
+import { DefaultEdge, Edge, Point, WithContextMenuProps, WithSelectionProps } from '@patternfly/react-topology';
+
+import './RequestTrace.css';
 
 type StyleEdgeProps = {
   element: Edge;
@@ -20,6 +22,20 @@ const StyleEdge: React.FunctionComponent<StyleEdgeProps> = ({ element, onContext
     return newData;
   }, [data]);
 
+  const traceEdgeOverlay = () => {
+    if (element.getType() !== 'request-trace-edge') {
+      return null;
+    }
+    const bendpoints = element.getBendpoints();
+    const startPoint = element.getStartPoint();
+    const endPoint = element.getEndPoint();
+
+    const d = `M${startPoint.x} ${startPoint.y} ${bendpoints.map((b: Point) => `L${b.x} ${b.y} `).join('')}L${
+      endPoint.x
+    } ${endPoint.y}`;
+    return <path className="request-trace-edge-overlay" d={d} />;
+  };
+
   return (
     <DefaultEdge
       element={element}
@@ -27,7 +43,9 @@ const StyleEdge: React.FunctionComponent<StyleEdgeProps> = ({ element, onContext
       {...passedData}
       onContextMenu={data?.showContextMenu ? onContextMenu : undefined}
       contextMenuOpen={contextMenuOpen}
-    />
+    >
+      {traceEdgeOverlay()}
+    </DefaultEdge>
   );
 };
 

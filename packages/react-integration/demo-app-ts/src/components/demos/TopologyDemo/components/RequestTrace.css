@@ -1,0 +1,9 @@
+.request-trace-node-overlay {
+  fill: pink;
+  fill-opacity: 30%;
+}
+.request-trace-edge-overlay {
+  stroke: pink;
+  stroke-opacity: 30%;
+  stroke-width: 10px;
+}
