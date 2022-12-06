@@ -71,7 +71,7 @@ import defaultComponentFactory from './components/defaultComponentFactory';
 import { generateDataModel } from './data/generator';
 import { useTopologyOptions } from './useTopologyOptions';
 
-const TopologyViewComponent = () => {
+const TopologyViewComponent: React.FunctionComponent = () => {
   const [selectedIds, setSelectedIds] = React.useState<string[]>([]);
   const controller = useVisualizationController();
 
