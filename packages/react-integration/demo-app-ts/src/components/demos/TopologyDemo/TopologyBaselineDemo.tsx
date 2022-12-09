@@ -1,70 +1,125 @@
 import * as React from 'react';
 import {
+  EdgeStyle,
+  Model,
+  NodeShape,
   SELECTION_EVENT,
-  SelectionEventListener,
-  TopologyView,
-  useEventListener,
-  useVisualizationController,
   Visualization,
   VisualizationProvider,
   VisualizationSurface
 } from '@patternfly/react-topology';
-import stylesComponentFactory from './components/stylesComponentFactory';
 import defaultLayoutFactory from './layouts/defaultLayoutFactory';
 import defaultComponentFactory from './components/defaultComponentFactory';
-import { generateDataModel } from './data/generator';
-import { useTopologyOptions } from './useTopologyOptions';
 
-const TopologyViewComponent: React.FunctionComponent = () => {
+const NODE_SHAPE = NodeShape.ellipse;
+const NODE_DIAMETER = 75;
+
+const NODES = [
+  {
+    id: 'node-0',
+    type: 'node',
+    label: 'Node 0',
+    width: NODE_DIAMETER,
+    height: NODE_DIAMETER,
+    shape: NODE_SHAPE
+  },
+  {
+    id: 'node-1',
+    type: 'node',
+    label: 'Node 1',
+    width: NODE_DIAMETER,
+    height: NODE_DIAMETER,
+    shape: NODE_SHAPE
+  },
+  {
+    id: 'node-2',
+    type: 'node',
+    label: 'Node 2',
+    width: NODE_DIAMETER,
+    height: NODE_DIAMETER,
+    shape: NODE_SHAPE
+  },
+  {
+    id: 'node-3',
+    type: 'node',
+    label: 'Node 3',
+    width: NODE_DIAMETER,
+    height: NODE_DIAMETER,
+    shape: NODE_SHAPE
+  },
+  {
+    id: 'node-4',
+    type: 'node',
+    label: 'Node 4',
+    width: NODE_DIAMETER,
+    height: NODE_DIAMETER,
+    shape: NODE_SHAPE
+  },
+  {
+    id: 'node-5',
+    type: 'node',
+    label: 'Node 5',
+    width: NODE_DIAMETER,
+    height: NODE_DIAMETER,
+    shape: NODE_SHAPE
+  },
+  {
+    id: 'Group-1',
+    children: ['node-0', 'node-1', 'node-2', 'node-3'],
+    type: 'group-hull',
+    group: true,
+    label: 'Group-1',
+    style: {
+      padding: 15
+    }
+  }
+];
+
+const EDGES = [
+  {
+    id: 'edge-node-4-node-5',
+    type: 'edge',
+    source: 'node-4',
+    target: 'node-5',
+    edgeStyle: EdgeStyle.default
+  },
+  {
+    id: 'edge-node-0-node-2',
+    type: 'edge',
+    source: 'node-0',
+    target: 'node-2',
+    edgeStyle: EdgeStyle.default
+  }
+];
+
+export const TopologyBaselineDemo = React.memo(() => {
   const [selectedIds, setSelectedIds] = React.useState<string[]>([]);
-  const controller = useVisualizationController();
 
-  const { nodeOptions, edgeOptions, nestedLevel, creationCounts } = useTopologyOptions(controller);
-
-  React.useEffect(() => {
-    const dataModel = generateDataModel(
-      creationCounts.numNodes,
-      creationCounts.numGroups,
-      creationCounts.numEdges,
-      nestedLevel,
-      nodeOptions,
-      edgeOptions
-    );
-
-    const model = {
+  const controller = React.useMemo(() => {
+    const model: Model = {
+      nodes: NODES,
+      edges: EDGES,
       graph: {
         id: 'g1',
         type: 'graph',
         layout: 'Cola'
-      },
-      ...dataModel
+      }
     };
 
-    controller.fromModel(model, false);
-    // Don't update on option changes, its handled differently to not re-layout
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [creationCounts]);
+    const newController = new Visualization();
+    newController.registerLayoutFactory(defaultLayoutFactory);
+    newController.registerComponentFactory(defaultComponentFactory);
 
-  useEventListener<SelectionEventListener>(SELECTION_EVENT, ids => {
-    setSelectedIds(ids);
-  });
+    newController.addEventListener(SELECTION_EVENT, setSelectedIds);
 
-  return (
-    <TopologyView>
-      <VisualizationSurface state={{ selectedIds }} />
-    </TopologyView>
-  );
-};
+    newController.fromModel(model, false);
 
-export const TopologyBaselineDemo = React.memo(() => {
-  const controller = new Visualization();
-  controller.registerLayoutFactory(defaultLayoutFactory);
-  controller.registerComponentFactory(defaultComponentFactory);
-  controller.registerComponentFactory(stylesComponentFactory);
+    return newController;
+  }, []);
 
   return (
     <VisualizationProvider controller={controller}>
-      <TopologyViewComponent />
+      <VisualizationSurface state={{ selectedIds }} />
     </VisualizationProvider>
   );
 });
