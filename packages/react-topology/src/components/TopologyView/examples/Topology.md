@@ -1,155 +1,30 @@
 ---
 id: Topology view
-section: components
+section: extensions
 ---
 
 Note: Topology lives in its own package at [`@patternfly/react-topology`](https://www.npmjs.com/package/@patternfly/react-topology)
 
-import ExternalLinkAltIcon from '@patternfly/react-icons/dist/esm/icons/external-link-alt-icon';
-import FilmIcon from '@patternfly/react-icons/dist/esm/icons/film-icon';
-import GlassCheersIcon from '@patternfly/react-icons/dist/esm/icons/glass-cheers-icon';
-import { TopologyView, TopologyControlBar, createTopologyControlButtons, TopologySideBar } from '@patternfly/react-topology';
-import { ProjectToolbar } from './ProjectToolbar';
-import { ViewToolbar } from './ViewToolbar';
-import { ItemDetails } from './ItemDetails';
-import './topology-example.css';
+## Basic Usage
 
-## Examples
-### Default controls
-```js
-import React from 'react';
-import { TopologyView, TopologyControlBar, createTopologyControlButtons, TopologySideBar } from '@patternfly/react-topology';
-import { ProjectToolbar } from './ProjectToolbar';
-import { ViewToolbar } from './ViewToolbar';
-import { ItemDetails } from './ItemDetails';
+To use React Topology out-of-the-box, you will first need to transform your back-end data into a [Model](https://github.com/patternfly/patternfly-react/blob/main/packages/react-topology/src/types.ts#L16-L20). These model objects contain the information needed to display the nodes and edges. Each node and edge has a set of properties used by PF Topology as well as a data field which can be used to customize the nodes and edges by the application.
 
-class DefaultTopologyView extends React.Component {
-  constructor(props) {
-    super(props);
+You will then need to declare a controller, which can be initialized via the `useVisualizationController()` method.
 
-    this.state = { detailsShown: false };
-  }
+The `fromModel` method must be called on the controller to create the nodes. `fromModel` will take your data model as a parameter. Your data model should include a `graph` object, on which you will need to set `id` , `type` and `layout`.
 
-  render() {
-    const { detailsShown } = this.state;
-    const controlButtons = createTopologyControlButtons();
-    const sideBar = <ItemDetails show={detailsShown} onClose={() => this.setState({ detailsShown: false })} />;
+To create your topology view component, you can use `TopologyView` to Wrap `<VisualizationSurface>` which can accept `state` as a parameter. The state is application specific. It can be any data the application wants to store/retrieve from the controller. Adding state to the surface allows hooks to update when state changes. The state is useful to keep graph state such as selected elements.
 
-    return (
-      <TopologyView 
-        contextToolbar={<ProjectToolbar />}
-        viewToolbar={<ViewToolbar />}
-        controlBar={<TopologyControlBar controlButtons={controlButtons} />}
-        sideBar={sideBar}
-        sideBarOpen={detailsShown}
-      >
-        <button onClick={() => this.setState({ detailsShown: !detailsShown })}>
-          {detailsShown ? 'Hide Details' : 'Show Details'}
-        </button>
-      </TopologyView>
-    );
-  }
-}
-```
+Use a controller to wrap your topology view component. In the example below, this is done via the `VisualizationProvider` which consumes the `Controller` via context.
 
-### Selected controls
-```js
-import React from 'react';
-import { TopologyView, TopologyControlBar, createTopologyControlButtons } from '@patternfly/react-topology';
-import { ItemDetails } from './ItemDetails';
-import { ViewToolbar } from './ViewToolbar';
+Three `register` methods are accessed by the controller.
 
-class SelectedTopologyView extends React.Component {
-  constructor(props) {
-    super(props);
+The following two must be declared explicitly\:
 
-    this.state = { detailsShown: false };
-  }
+- `registerLayoutFactory`: This method sets the layout of your topology view (e.g. Force, Dagre, Cola, etc.). You can use `defaultLayoutFactory` as a parameter if your application supports all layouts. You can also update `defaultLayout` to a custom implementation if you only want to support a subset of the available layout options.
 
-  render() {
-    const { detailsShown } = this.state;
-    const sideBar = <ItemDetails show={detailsShown} onClose={() => this.setState({ detailsShown: false })} />;
-    const controlButtons = createTopologyControlButtons({ fitToScreen: false, legend: false });
+- `registerComponentFactory`: This method lets you customize the components in your topology view (e.g. nodes, groups, and edges). You can use `defaultComponentFactory` as a parameter.
 
-    return (
-      <TopologyView
-        viewToolbar={<ViewToolbar />}
-        controlBar={<TopologyControlBar controlButtons={controlButtons} />}
-        sideBar={sideBar}
-        sideBarOpen={detailsShown}
-      >
-        <button onClick={() => this.setState({ detailsShown: !detailsShown })}>
-          {detailsShown ? 'Hide Details' : 'Show Details'}
-        </button>
-      </TopologyView>
-    );
-  }
-}
-```
+The register method below is initialized in `Visualization.ts`, therefore it doesn't need to be declared unless you want to support a custom implementation which modifies the types.
 
-### Custom controls
-```js
-import React from 'react';
-import ExternalLinkAltIcon from '@patternfly/react-icons/dist/esm/icons/external-link-alt-icon';
-import FilmIcon from '@patternfly/react-icons/dist/esm/icons/film-icon';
-import GlassCheersIcon from '@patternfly/react-icons/dist/esm/icons/glass-cheers-icon';
-import { TopologyView, TopologyControlBar, createTopologyControlButtons } from '@patternfly/react-topology';
-import { ItemDetails } from './ItemDetails';
-import { ViewToolbar } from './ViewToolbar';
-
-class CustomTopologyView extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = { detailsShown: false };
-  }
-
-  render() {
-    const { detailsShown } = this.state;
-    const sideBar = <ItemDetails show={detailsShown} onClose={() => this.setState({ detailsShown: false })} />;
-    const customButtons = [
-      {
-        id: 'custom-1',
-        icon: <ExternalLinkAltIcon />,
-        tooltip: 'External Link',
-        ariaLabel: 'external link',
-        callback: null,
-        disabled: true,
-        hidden: false
-      },
-      {
-        id: 'custom-2',
-        icon: <FilmIcon />,
-        tooltip: 'Watch',
-        ariaLabel: 'watch',
-        callback: null,
-        disabled: false,
-        hidden: false
-      },
-      {
-        id: 'custom-3',
-        icon: <GlassCheersIcon />,
-        tooltip: 'Cheers',
-        ariaLabel: 'cheers',
-        callback: null,
-        disabled: false,
-        hidden: true
-      },
-    ]
-    const controlButtons = createTopologyControlButtons({ fitToScreen: false, customButtons});
-
-    return (
-      <TopologyView
-        viewToolbar={<ViewToolbar />}
-        controlBar={<TopologyControlBar controlButtons={controlButtons} />}
-        sideBar={sideBar}
-        sideBarOpen={detailsShown}
-      >
-        <button onClick={() => this.setState({ detailsShown: !detailsShown })}>
-          {detailsShown ? 'Hide Details' : 'Show Details'}
-        </button>
-      </TopologyView>
-    );
-  }
-}
-```
+- `registerElementFactory`: This method sets the types of the elements being used (e.g. graphs, nodes, edges). `defaultElementFactory` uses types from `ModelKind` and is exported in `index.ts`.
