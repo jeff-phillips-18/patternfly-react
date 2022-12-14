@@ -10,6 +10,7 @@ import { Dnd, DndShiftRegroup } from './DragDrop';
 import { ContextMenuOnNode, ControlledContextMenu, UncontrolledContextMenu } from './ContextMenus';
 import { Topology, WithResizableSideBar, WithSideBar } from './TopologyPackage';
 import { TopologyBaselineDemo } from './TopologyBaselineDemo';
+import { TopologyStylesDemo } from './TopologyStylesDemo';
 import { ComplexGroup } from './Groups';
 import { CollapsibleGroups } from './CollapsibleGroups';
 import {
@@ -52,8 +53,10 @@ const SHAPES = 7;
 const CONTEXT_MENU = 8;
 const TOPOLOGY_PACKAGE = 9;
 const TOPOLOGY_BASELINE = 10;
-const COMPLEX_GROUP = 11;
-const COLLAPSIBLE_GROUPS = 12;
+const TOPOLOGY_STYLES = 11;
+
+const COMPLEX_GROUP = 12;
+const COLLAPSIBLE_GROUPS = 13;
 
 export const TopologyDemo: React.FunctionComponent = () => {
   const [activeKey, setActiveKey] = React.useState<number>(STYLES);
@@ -280,6 +283,13 @@ export const TopologyDemo: React.FunctionComponent = () => {
           <Tabs unmountOnExit activeKey={activeSecondaryKey} onSelect={handleSecondaryTabClick}>
             <Tab eventKey={0} title={<TabTitleText>Baseline demo</TabTitleText>}>
               <TopologyBaselineDemo />
+            </Tab>
+          </Tabs>
+        </Tab>
+        <Tab eventKey={TOPOLOGY_STYLES} title={<TabTitleText>Base Styles demo</TabTitleText>}>
+          <Tabs unmountOnExit activeKey={activeSecondaryKey} onSelect={handleSecondaryTabClick}>
+            <Tab eventKey={0} title={<TabTitleText>Base Styles demo</TabTitleText>}>
+              <TopologyStylesDemo />
             </Tab>
           </Tabs>
         </Tab>
