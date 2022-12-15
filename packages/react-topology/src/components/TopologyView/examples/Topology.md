@@ -28,3 +28,26 @@ The following two must be declared explicitly\:
 The register method below is initialized in `Visualization.ts`, therefore it doesn't need to be declared unless you want to support a custom implementation which modifies the types.
 
 - `registerElementFactory`: This method sets the types of the elements being used (e.g. graphs, nodes, edges). `defaultElementFactory` uses types from `ModelKind` and is exported in `index.ts`.
+
+import {
+ColaLayout,
+DefaultEdge,
+DefaultGroup,
+DefaultNode,
+EdgeStyle,
+GraphComponent,
+ModelKind,
+NodeShape,
+SELECTION_EVENT,
+Visualization,
+VisualizationProvider,
+VisualizationSurface
+} from '@patternfly/react-topology';
+import './topology-example.css';
+
+## Examples
+### Baseline Topology
+```ts file='./TopologyBaselineDemo.tsx'
+```
+
+### Next Demo
