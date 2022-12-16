@@ -10,6 +10,7 @@ import { Dnd, DndShiftRegroup } from './DragDrop';
 import { ContextMenuOnNode, ControlledContextMenu, UncontrolledContextMenu } from './ContextMenus';
 import { Topology, WithResizableSideBar, WithSideBar } from './TopologyPackage';
 import { TopologyBaselineDemo } from './TopologyBaselineDemo';
+import { TopologyCustomNodeDemo } from './TopologyCustomNodeDemo';
 import { TopologyStylesDemo } from './TopologyStylesDemo';
 import { ComplexGroup } from './Groups';
 import { CollapsibleGroups } from './CollapsibleGroups';
@@ -57,6 +58,8 @@ const TOPOLOGY_STYLES = 11;
 
 const COMPLEX_GROUP = 12;
 const COLLAPSIBLE_GROUPS = 13;
+
+const TOPOLOGY_CUSTOM_NODE = 14;
 
 export const TopologyDemo: React.FunctionComponent = () => {
   const [activeKey, setActiveKey] = React.useState<number>(STYLES);
@@ -283,6 +286,13 @@ export const TopologyDemo: React.FunctionComponent = () => {
           <Tabs unmountOnExit activeKey={activeSecondaryKey} onSelect={handleSecondaryTabClick}>
             <Tab eventKey={0} title={<TabTitleText>Baseline demo</TabTitleText>}>
               <TopologyBaselineDemo />
+            </Tab>
+          </Tabs>
+        </Tab>
+        <Tab eventKey={TOPOLOGY_CUSTOM_NODE} title={<TabTitleText>Custom Node demo</TabTitleText>}>
+          <Tabs unmountOnExit activeKey={activeSecondaryKey} onSelect={handleSecondaryTabClick}>
+            <Tab eventKey={0} title={<TabTitleText>Baseline demo</TabTitleText>}>
+              <TopologyCustomNodeDemo />
             </Tab>
           </Tabs>
         </Tab>
