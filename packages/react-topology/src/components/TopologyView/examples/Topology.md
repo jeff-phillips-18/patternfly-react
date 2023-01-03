@@ -38,16 +38,25 @@ EdgeStyle,
 GraphComponent,
 ModelKind,
 NodeShape,
+NodeStatus,
 SELECTION_EVENT,
 Visualization,
 VisualizationProvider,
 VisualizationSurface
 } from '@patternfly/react-topology';
+
 import './topology-example.css';
+import Icon1 from '@patternfly/react-icons/dist/esm/icons/regions-icon';
+import Icon2 from '@patternfly/react-icons/dist/esm/icons/folder-open-icon';
 
 ## Examples
+
 ### Baseline Topology
+
 ```ts file='./TopologyBaselineDemo.tsx'
 ```
 
-### Next Demo
+### Custom Topology
+
+```ts file='./TopologyCustomNodeDemo.tsx'
+```
