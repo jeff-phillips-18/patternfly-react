@@ -66,7 +66,7 @@ const CustomNode: React.FC<CustomNodeProps> = ({ element }) => {
   );
 };
 
-const baselineLayoutFactory: LayoutFactory = (type: string, graph: Graph): Layout | undefined => {
+const customLayoutFactory: LayoutFactory = (type: string, graph: Graph): Layout | undefined => {
   switch (type) {
     case 'Cola':
       return new ColaLayout(graph);
@@ -75,7 +75,7 @@ const baselineLayoutFactory: LayoutFactory = (type: string, graph: Graph): Layou
   }
 };
 
-const baselineComponentFactory: ComponentFactory = (kind: ModelKind, type: string) => {
+const customComponentFactory: ComponentFactory = (kind: ModelKind, type: string) => {
   switch (type) {
     case 'group':
       return DefaultGroup;
@@ -217,8 +217,8 @@ export const TopologyCustomNodeDemo: React.FC = () => {
     };
 
     const newController = new Visualization();
-    newController.registerLayoutFactory(baselineLayoutFactory);
-    newController.registerComponentFactory(baselineComponentFactory);
+    newController.registerLayoutFactory(customLayoutFactory);
+    newController.registerComponentFactory(customComponentFactory);
 
     newController.addEventListener(SELECTION_EVENT, setSelectedIds);
 
