@@ -3,6 +3,136 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 4.267.7 (2022-12-19)
+
+**Note:** Version bump only for package @patternfly/react-core
+
+
+
+
+
+## [4.267.6](https://github.com/patternfly/patternfly-react/compare/@patternfly/react-core@4.267.5...@patternfly/react-core@4.267.6) (2022-12-12)
+
+
+### Bug Fixes
+
+* Remove package exports and replace subpaths script ([#8438](https://github.com/patternfly/patternfly-react/issues/8438)) ([75bea27](https://github.com/patternfly/patternfly-react/commit/75bea2790cffcfe2ffc9ca46d82748e3e85674fc))
+
+
+
+
+
+## [4.267.5](https://github.com/patternfly/patternfly-react/compare/@patternfly/react-core@4.267.4...@patternfly/react-core@4.267.5) (2022-12-09)
+
+**Note:** Version bump only for package @patternfly/react-core
+
+
+
+
+
+## [4.267.4](https://github.com/patternfly/patternfly-react/compare/@patternfly/react-core@4.267.3...@patternfly/react-core@4.267.4) (2022-12-08)
+
+**Note:** Version bump only for package @patternfly/react-core
+
+
+
+
+
+## [4.267.3](https://github.com/patternfly/patternfly-react/compare/@patternfly/react-core@4.267.2...@patternfly/react-core@4.267.3) (2022-12-08)
+
+**Note:** Version bump only for package @patternfly/react-core
+
+
+
+
+
+## 4.267.2 (2022-12-08)
+
+
+### Bug Fixes
+
+* **Menu:** removed li wrapper from breadcrumb example ([#8433](https://github.com/patternfly/patternfly-react/issues/8433)) ([1f41a71](https://github.com/patternfly/patternfly-react/commit/1f41a712fb8124a931277eb6611923746cd24496))
+
+
+
+
+
+## 4.267.1 (2022-12-08)
+
+**Note:** Version bump only for package @patternfly/react-core
+
+
+
+
+
+# [4.267.0](https://github.com/patternfly/patternfly-react/compare/@patternfly/react-core@4.266.3...@patternfly/react-core@4.267.0) (2022-12-07)
+
+
+### Features
+
+* **Menu:** add drilldown filter demo, add flag to support demo & fix some keyboard interaction ([#8405](https://github.com/patternfly/patternfly-react/issues/8405)) ([6fd28da](https://github.com/patternfly/patternfly-react/commit/6fd28da87bbc1f06553df388c626de8d94e0fa05))
+
+
+
+
+
+## [4.266.3](https://github.com/patternfly/patternfly-react/compare/@patternfly/react-core@4.266.2...@patternfly/react-core@4.266.3) (2022-12-07)
+
+**Note:** Version bump only for package @patternfly/react-core
+
+
+
+
+
+## [4.266.2](https://github.com/patternfly/patternfly-react/compare/@patternfly/react-core@4.266.1...@patternfly/react-core@4.266.2) (2022-12-06)
+
+
+### Bug Fixes
+
+* **Pagination:** Added support for insets ([#8412](https://github.com/patternfly/patternfly-react/issues/8412)) ([1053d53](https://github.com/patternfly/patternfly-react/commit/1053d530605c4f629eefdc7501b121a1906394a2))
+
+
+
+
+
+## [4.266.1](https://github.com/patternfly/patternfly-react/compare/@patternfly/react-core@4.266.0...@patternfly/react-core@4.266.1) (2022-12-06)
+
+**Note:** Version bump only for package @patternfly/react-core
+
+
+
+
+
+# [4.266.0](https://github.com/patternfly/patternfly-react/compare/@patternfly/react-core@4.265.2...@patternfly/react-core@4.266.0) (2022-12-06)
+
+
+### Features
+
+* **ClipboardCopy, Truncate:** add removeFindDomNode ([#8371](https://github.com/patternfly/patternfly-react/issues/8371)) ([1cb5801](https://github.com/patternfly/patternfly-react/commit/1cb580101a2a4dcb1d29a8ba46ba96f9a9912de3))
+
+
+
+
+
+## 4.265.2 (2022-12-06)
+
+
+### Bug Fixes
+
+* **AdvancedSearchMenu:** allow spaces in search form field values ([#8372](https://github.com/patternfly/patternfly-react/issues/8372)) ([e026b8c](https://github.com/patternfly/patternfly-react/commit/e026b8c04fe25e94c5d7c4b697d774bab562eed8)), closes [#8369](https://github.com/patternfly/patternfly-react/issues/8369)
+
+
+
+
+
+## [4.265.1](https://github.com/patternfly/patternfly-react/compare/@patternfly/react-core@4.265.0...@patternfly/react-core@4.265.1) (2022-12-05)
+
+**Note:** Version bump only for package @patternfly/react-core
+
+
+
+
+
 # 4.265.0 (2022-12-01)
 
 

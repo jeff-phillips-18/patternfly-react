@@ -9,17 +9,41 @@ Note: Topology lives in its own package at [`@patternfly/react-topology`](https:
 
 To use React Topology out-of-the-box, you will first need to transform your back-end data into a [Model](https://github.com/patternfly/patternfly-react/blob/main/packages/react-topology/src/types.ts#L16-L20). These model objects contain the information needed to display the nodes and edges. Each node and edge has a set of properties used by PF Topology as well as a data field which can be used to customize the nodes and edges by the application.
 
-You will then need to declare a controller, which can be initialized via the `useVisualizationController()` method.
+import {
+ColaLayout,
+DefaultEdge,
+DefaultGroup,
+DefaultNode,
+EdgeStyle,
+GraphComponent,
+ModelKind,
+NodeShape,
+NodeStatus,
+SELECTION_EVENT,
+Visualization,
+VisualizationProvider,
+VisualizationSurface
+} from '@patternfly/react-topology';
 
-The `fromModel` method must be called on the controller to create the nodes. `fromModel` will take your data model as a parameter. Your data model should include a `graph` object, on which you will need to set `id` , `type` and `layout`.
+import './topology-example.css';
+import Icon1 from '@patternfly/react-icons/dist/esm/icons/regions-icon';
+import Icon2 from '@patternfly/react-icons/dist/esm/icons/folder-open-icon';
 
-To create your topology view component, you can use `TopologyView` to Wrap `<VisualizationSurface>` which can accept `state` as a parameter. The state is application specific. It can be any data the application wants to store/retrieve from the controller. Adding state to the surface allows hooks to update when state changes. The state is useful to keep graph state such as selected elements.
+## Examples
 
-Use a controller to wrap your topology view component. In the example below, this is done via the `VisualizationProvider` which consumes the `Controller` via context.
+### Baseline Topology
 
-Three `register` methods are accessed by the controller.
+1. Declare a controller, which can be initialized via the `useVisualizationController()` method.
 
-The following two must be declared explicitly\:
+1. The `fromModel` method must be called on the controller to create the nodes. `fromModel` will take your data model as a parameter. Your data model should include a `graph` object, on which you will need to set `id` , `type` and `layout`.
+
+1. Create your topology view component, you can use `TopologyView` to Wrap `<VisualizationSurface>` which can accept `state` as a parameter. The state is application specific. It can be any data the application wants to store/retrieve from the controller. Adding state to the surface allows hooks to update when state changes. The state is useful to keep graph state such as selected elements.
+
+1. Use a controller to wrap your topology view component. In the example below, this is done via the `VisualizationProvider` which consumes the `Controller` via context.
+
+It is important to note that three `register` methods are accessed by the controller.
+
+The following two must be declared explicitly:
 
 - `registerLayoutFactory`: This method sets the layout of your topology view (e.g. Force, Dagre, Cola, etc.). You can use `defaultLayoutFactory` as a parameter if your application supports all layouts. You can also update `defaultLayout` to a custom implementation if you only want to support a subset of the available layout options.
 
@@ -28,3 +52,20 @@ The following two must be declared explicitly\:
 The register method below is initialized in `Visualization.ts`, therefore it doesn't need to be declared unless you want to support a custom implementation which modifies the types.
 
 - `registerElementFactory`: This method sets the types of the elements being used (e.g. graphs, nodes, edges). `defaultElementFactory` uses types from `ModelKind` and is exported in `index.ts`.
+
+```ts file='./TopologyBaselineDemo.tsx'
+```
+
+### Custom Topology
+
+To create a demo with custom node styling, you will need to create a custom node component, which your `customComponentFactory` will return.
+
+To do this, you will need:
+
+1. A `CustomNodeProps` interface with an `element` of type `Node`.
+2. A `CustomNode` component, with `CustomNodeProps` as the generic type, and the destructured `element` as the parameter. The code in the example shows how you can get data from `element` and apply it to the attributes of `DefaultNode`.
+
+Within each node in your `NODES` array, you can set `data` to include additional custom attributes.
+
+```ts file='./TopologyCustomNodeDemo.tsx'
+```
