@@ -58,7 +58,7 @@ import './topology-pipelines-example.css';
 4. Determine the edges in your model by calling the `getEdgesFromNodes` function, passing it all the nodes including the spacer nodes.
 5. The `fromModel` method can then be called, passing along all nodes and determined edges. Your data model should include a `graph` object, on which you will need to set `id` , `type` and `layout`.
 
-5. To create your topology view component, add a `VisualizationProvider`, which is a useful context provider. It allows access to the created Controller and is required when using the `VisualizationSurface` component.
+6. To create your topology view component, add a `VisualizationProvider`, which is a useful context provider. It allows access to the created Controller and is required when using the `VisualizationSurface` component.
 
 6. You can use the provided `VisualizationSurface` to provide the SVG component required for the topology components. The `VisualizationSurface` can take a state parameter that will allow you to pass your state settings along to the Controller.
 
