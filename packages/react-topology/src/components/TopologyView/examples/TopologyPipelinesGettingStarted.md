@@ -52,7 +52,7 @@ import './topology-pipelines-example.css';
 
     - `registerElementFactory`: This method sets the types of the elements being used (e.g. graphs, nodes, edges). `defaultElementFactory` uses types from `ModelKind` and is exported in `index.ts`.
 
-2. Once you have determined the task nodes and their relationships are set using the `runAfterTasks` field, use the `getSpacerNodes` function to determine the
+2. Set the task nodes and their relationships using the `runAfterTasks` field.
 necessary spacer nodes. Spacer nodes are used to aggregate edges to/from multiple task nodes.
 3. Determine the edges in your model by calling the `getEdgesFromNodes` function, passing it all the nodes including the spacer nodes.
 4. The `fromModel` method can then be called, passing along all nodes and determined edges. Your data model should include a `graph` object, on which you will need to set `id` , `type` and `layout`.
