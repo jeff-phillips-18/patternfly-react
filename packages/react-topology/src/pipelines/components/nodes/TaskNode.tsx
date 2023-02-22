@@ -85,7 +85,7 @@ export interface TaskNodeProps {
   disableTooltip?: boolean;
   /** Tooltip to show on node hover */
   toolTip?: React.ReactNode;
-  /** Falg if the node has a 'when expression' */
+  /** Flag if the node has a 'when expression' */
   hasWhenExpression?: boolean;
   /** Size of the when expression indicator */
   whenSize?: number;
