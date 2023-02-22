@@ -53,7 +53,9 @@ import './topology-pipelines-example.css';
     - `registerElementFactory`: This method sets the types of the elements being used (e.g. graphs, nodes, edges). `defaultElementFactory` uses types from `ModelKind` and is exported in `index.ts`.
 
 2. Set the task nodes and their relationships using the `runAfterTasks` field.
-3. Determine the edges in your model by calling the `getEdgesFromNodes` function, passing it all the nodes including the spacer nodes.
+3. Use the `getSpacerNodes` function to determine the necessary spacer nodes. Spacer nodes are used to aggregate edges to/from multiple task nodes.
+
+4. Determine the edges in your model by calling the `getEdgesFromNodes` function, passing it all the nodes including the spacer nodes.
 4. The `fromModel` method can then be called, passing along all nodes and determined edges. Your data model should include a `graph` object, on which you will need to set `id` , `type` and `layout`.
 
 5. To create your topology view component, add a `VisualizationProvider`, which is a useful context provider. It allows access to the created Controller and is required when using the `VisualizationSurface` component.
