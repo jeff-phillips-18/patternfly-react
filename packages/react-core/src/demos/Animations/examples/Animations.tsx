@@ -57,6 +57,10 @@ import ExclamationTriangleIcon from '@patternfly/react-icons/dist/esm/icons/excl
 import ResourcesFullIcon from '@patternfly/react-icons/dist/esm/icons/resources-full-icon';
 // @ts-ignore
 import pfLogo from '@patternfly/react-core/src/demos/assets/pf-logo.PF-HorizontalLogo-Color.svg';
+// @ts-ignore
+import openshiftLogo from '../Summit-collage-depoying-openshift-product-icon-RH.png';
+// @ts-ignore
+import emptyStateLogo from '../Summit-collage-hybrid-cloud-dark-RH.png';
 import { Application, GuidedTourStep, NotificationType } from '../types';
 import { AnimationsOverview } from '../../../../dist/esm/demos/Animations/AnimationsOverview';
 import { AnimationsNotificationsDrawer } from '../../../../dist/esm/demos/Animations/AnimationsNotificationsDrawer';
@@ -66,8 +70,6 @@ import { AnimationsHeaderToolbar } from '../../../../dist/esm/demos/Animations/A
 import { AnimationsStartTourModal } from '../../../../dist/esm/demos/Animations/AnimationsStartTourModal';
 import { AnimationsEndTourModal } from '../../../../dist/esm/demos/Animations/AnimationsEndTourModal';
 import { applicationsData } from './ResourceTableData';
-import openshiftLogo from '../../assets/Summit-collage-depoying-openshift-product-icon-RH.png';
-import emptyStateLogo from '../../assets/Summit-collage-hybrid-cloud-dark-RH.png';
 
 // Simple component to wrap the empty state logo
 const EmptyStateLogoIcon: React.FunctionComponent = () => (
