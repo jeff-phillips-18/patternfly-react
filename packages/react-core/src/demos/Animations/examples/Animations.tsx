@@ -724,85 +724,6 @@ const AnimationsResourcesTable: FunctionComponent = () => {
   const [loading, setLoading] = useState(true);
   const { tourStep, renderTourStepElement } = useGuidedTour();
 
-  // --- 1. ADD STATE FOR FAVORITES ---
-  const [favoriteAppNames, setFavoriteAppNames] = useState([]);
-  const [headerFavorited, setHeaderFavorited] = useState(false);
-
-  // --- ADD SORTING STATE ---
-  const [activeSortIndex, setActiveSortIndex] = useState();
-  const [activeSortDirection, setActiveSortDirection] = useState();
-
-  // --- 2. ADD HELPER FUNCTIONS FOR FAVORITES ---
-  const setAppFavorited = (app: Application, isFavoriting = true) =>
-    setFavoriteAppNames((prevFavorites) => {
-      const otherFavorites = prevFavorites.filter((r) => r !== app.name);
-      return isFavoriting ? [...otherFavorites, app.name] : otherFavorites;
-    });
-
-  const isAppFavorited = (app: Application) => favoriteAppNames.includes(app.name);
-
-  // --- SORTED DATA STATE ---
-  const [sortedApplicationsData, setSortedApplicationsData] = useState(applicationsData);
-
-  // --- SORT THE DATA ONLY WHEN SORT BUTTON IS CLICKED ---
-  useEffect(() => {
-    if (activeSortIndex !== undefined && activeSortDirection) {
-      const sorted = [...applicationsData].sort((a, b) => {
-        const aValue = favoriteAppNames.includes(a.name);
-        const bValue = favoriteAppNames.includes(b.name);
-        if (aValue === bValue) {
-          return 0;
-        }
-        if (activeSortDirection === 'asc') {
-          return aValue > bValue ? 1 : -1;
-        } else {
-          return bValue > aValue ? 1 : -1;
-        }
-      });
-      setSortedApplicationsData(sorted);
-    } else {
-      // No sorting active, use original order
-      setSortedApplicationsData(applicationsData);
-    }
-  }, [activeSortIndex, activeSortDirection]);
-
-  const getSortParams = (columnIndex: number) => ({
-    isFavorites: columnIndex === 0,
-    sortBy: {
-      index: activeSortIndex,
-      direction: activeSortDirection
-    },
-    onSort: (_event: any, index: number, direction) => {
-      // If clicking the same column that's already sorted, cycle through: asc -> desc -> none
-      if (activeSortIndex === index) {
-        if (activeSortDirection === 'asc') {
-          setActiveSortDirection('desc');
-        } else if (activeSortDirection === 'desc') {
-          // Clear sorting
-          setActiveSortIndex(undefined);
-          setActiveSortDirection(undefined);
-        }
-      } else {
-        // Sorting a new column
-        setActiveSortIndex(index);
-        setActiveSortDirection(direction);
-      }
-    },
-    'aria-label': 'Sort favorites',
-    columnIndex,
-    favoriteButtonProps: {
-      favorited: headerFavorited,
-      onClick: (_event: any) => {
-        applicationsData.forEach((app) => setAppFavorited(app, !headerFavorited));
-        setHeaderFavorited(!headerFavorited);
-      },
-      'aria-label': headerFavorited ? 'Unfavorite all' : 'Favorite all',
-      isFavorite: true,
-      isFavorited: headerFavorited,
-      variant: 'plain'
-    }
-  });
-
   // --- Existing hooks and functions ---
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 2000);
@@ -837,12 +758,10 @@ const AnimationsResourcesTable: FunctionComponent = () => {
           )}
         </>
       ) : (
-        <Table aria-label="Collapsible and favoritable table" isExpandable hasAnimations>
+        <Table aria-label="Collapsible table" isExpandable hasAnimations>
           <Thead>
             <Tr>
-              {/* Move favorite column to first position */}
-              <Th sort={getSortParams(0)} width={10} />
-              {/* Move expand column to second position */}
+              {/* Expand column */}
               <Th width={10} aria-label="Row expansion" />
               {expandableColumns.map((column) => (
                 <Th key={column}>{column}</Th>
@@ -851,30 +770,10 @@ const AnimationsResourcesTable: FunctionComponent = () => {
           </Thead>
 
           {/* Use separate Tbody for each expandable group like the working example */}
-          {sortedApplicationsData.map((app, idx) => (
+          {applicationsData.map((app, idx) => (
             <Tbody key={app.name} isExpanded={isAppExpanded(app)}>
               <Tr>
-                {/* Move favorite to first position */}
-                <Td
-                  favorites={{
-                    isFavorited: isAppFavorited(app),
-                    onFavorite: (_event, isFavoriting) => {
-                      setAppFavorited(app, isFavoriting);
-                      // Logic to check if all rows are now favorited/unfavorited
-                      if (
-                        isFavoriting &&
-                        applicationsData.filter((r) => r !== app).every((r) => favoriteAppNames.includes(r.name))
-                      ) {
-                        setHeaderFavorited(true);
-                      }
-                      if (!isFavoriting && favoriteAppNames.length === 1 && favoriteAppNames.includes(app.name)) {
-                        setHeaderFavorited(false);
-                      }
-                    },
-                    rowIndex: idx
-                  }}
-                />
-                {/* Move expand to second position */}
+                {/* Expand column */}
                 <Td
                   expand={
                     app.details
@@ -897,7 +796,6 @@ const AnimationsResourcesTable: FunctionComponent = () => {
                 </Td>
               </Tr>
               <Tr isExpanded={isAppExpanded(app)}>
-                <Td />
                 <Td />
                 <Td colSpan={expandableColumns.length}>
                   <ExpandableRowContent>{app.details}</ExpandableRowContent>
