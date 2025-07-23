@@ -728,6 +728,10 @@ const AnimationsResourcesTable: FunctionComponent = () => {
   const [favoriteAppNames, setFavoriteAppNames] = useState([]);
   const [headerFavorited, setHeaderFavorited] = useState(false);
 
+  // --- ADD SORTING STATE ---
+  const [activeSortIndex, setActiveSortIndex] = useState();
+  const [activeSortDirection, setActiveSortDirection] = useState();
+
   // --- 2. ADD HELPER FUNCTIONS FOR FAVORITES ---
   const setAppFavorited = (app: Application, isFavoriting = true) =>
     setFavoriteAppNames((prevFavorites) => {
@@ -737,20 +741,58 @@ const AnimationsResourcesTable: FunctionComponent = () => {
 
   const isAppFavorited = (app: Application) => favoriteAppNames.includes(app.name);
 
-  const getSortParams = (columnIndex) => ({
+  // --- SORTED DATA STATE ---
+  const [sortedApplicationsData, setSortedApplicationsData] = useState(applicationsData);
+
+  // --- SORT THE DATA ONLY WHEN SORT BUTTON IS CLICKED ---
+  useEffect(() => {
+    if (activeSortIndex !== undefined && activeSortDirection) {
+      const sorted = [...applicationsData].sort((a, b) => {
+        const aValue = favoriteAppNames.includes(a.name);
+        const bValue = favoriteAppNames.includes(b.name);
+        if (aValue === bValue) {
+          return 0;
+        }
+        if (activeSortDirection === 'asc') {
+          return aValue > bValue ? 1 : -1;
+        } else {
+          return bValue > aValue ? 1 : -1;
+        }
+      });
+      setSortedApplicationsData(sorted);
+    } else {
+      // No sorting active, use original order
+      setSortedApplicationsData(applicationsData);
+    }
+  }, [activeSortIndex, activeSortDirection]);
+
+  const getSortParams = (columnIndex: number) => ({
     isFavorites: columnIndex === 0,
     sortBy: {
-      index: undefined,
-      direction: undefined
+      index: activeSortIndex,
+      direction: activeSortDirection
     },
-    onSort: (_event) => {
-      // No sorting logic needed, just favorites
+    onSort: (_event: any, index: number, direction) => {
+      // If clicking the same column that's already sorted, cycle through: asc -> desc -> none
+      if (activeSortIndex === index) {
+        if (activeSortDirection === 'asc') {
+          setActiveSortDirection('desc');
+        } else if (activeSortDirection === 'desc') {
+          // Clear sorting
+          setActiveSortIndex(undefined);
+          setActiveSortDirection(undefined);
+        }
+      } else {
+        // Sorting a new column
+        setActiveSortIndex(index);
+        setActiveSortDirection(direction);
+      }
     },
     'aria-label': 'Sort favorites',
     columnIndex,
     favoriteButtonProps: {
       favorited: headerFavorited,
-      onClick: (_event) => {
+      onClick: (_event: any) => {
         applicationsData.forEach((app) => setAppFavorited(app, !headerFavorited));
         setHeaderFavorited(!headerFavorited);
       },
@@ -801,7 +843,7 @@ const AnimationsResourcesTable: FunctionComponent = () => {
               {/* Move favorite column to first position */}
               <Th sort={getSortParams(0)} width={10} />
               {/* Move expand column to second position */}
-              <Th width={10} />
+              <Th width={10} aria-label="Row expansion" />
               {expandableColumns.map((column) => (
                 <Th key={column}>{column}</Th>
               ))}
@@ -809,18 +851,14 @@ const AnimationsResourcesTable: FunctionComponent = () => {
           </Thead>
 
           {/* Use separate Tbody for each expandable group like the working example */}
-          {applicationsData.map((app, idx) => (
+          {sortedApplicationsData.map((app, idx) => (
             <Tbody key={app.name} isExpanded={isAppExpanded(app)}>
               <Tr>
                 {/* Move favorite to first position */}
-                <Td>
-                  <Button
-                    variant="plain"
-                    aria-label={isAppFavorited(app) ? `Unfavorite ${app.name}` : `Favorite ${app.name}`}
-                    isFavorite
-                    isFavorited={isAppFavorited(app)}
-                    onClick={() => {
-                      const isFavoriting = !isAppFavorited(app);
+                <Td
+                  favorites={{
+                    isFavorited: isAppFavorited(app),
+                    onFavorite: (_event, isFavoriting) => {
                       setAppFavorited(app, isFavoriting);
                       // Logic to check if all rows are now favorited/unfavorited
                       if (
@@ -832,37 +870,22 @@ const AnimationsResourcesTable: FunctionComponent = () => {
                       if (!isFavoriting && favoriteAppNames.length === 1 && favoriteAppNames.includes(app.name)) {
                         setHeaderFavorited(false);
                       }
-                    }}
-                  />
-                </Td>
-                {idx === 0 ? (
-                  renderTourStepElement(
-                    'expandableComponents',
-                    <Td
-                      expand={
-                        app.details
-                          ? {
-                              rowIndex: idx,
-                              isExpanded: isAppExpanded(app),
-                              onToggle: () => setAppExpanded(app, !isAppExpanded(app))
-                            }
-                          : undefined
-                      }
-                    />
-                  )
-                ) : (
-                  <Td
-                    expand={
-                      app.details
-                        ? {
-                            rowIndex: idx,
-                            isExpanded: isAppExpanded(app),
-                            onToggle: () => setAppExpanded(app, !isAppExpanded(app))
-                          }
-                        : undefined
-                    }
-                  />
-                )}
+                    },
+                    rowIndex: idx
+                  }}
+                />
+                {/* Move expand to second position */}
+                <Td
+                  expand={
+                    app.details
+                      ? {
+                          rowIndex: idx,
+                          isExpanded: isAppExpanded(app),
+                          onToggle: () => setAppExpanded(app, !isAppExpanded(app))
+                        }
+                      : undefined
+                  }
+                />
                 <Td>{app.name}</Td>
                 <Td>{app.header}</Td>
                 <Td>{app.branch}</Td>
